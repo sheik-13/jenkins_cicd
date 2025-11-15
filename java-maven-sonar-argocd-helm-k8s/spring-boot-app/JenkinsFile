@@ -10,6 +10,7 @@ pipeline {
       steps {
         sh 'echo passed'
         git branch: 'main', url: 'https://github.com/sheik-13/jenkins_cicd.git'
+        credentialsId: 'github'
       }
     }
     stage('Build and Test') {
