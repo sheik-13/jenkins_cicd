@@ -9,7 +9,7 @@ pipeline {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        git branch: 'main', url: 'https://github.com/sheik-13/jenkins_cicd.git'
+        git branch: 'main', url: 'https://github.com/sheik-13/jenkins_cicd.git',
         credentialsId: 'b4a023c8-2eb1-4be8-86d8-96ddd6d05921'
       }
     }
