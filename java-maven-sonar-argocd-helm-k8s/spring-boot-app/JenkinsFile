@@ -54,15 +54,30 @@ pipeline {
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
+                    # Clean old folder (if exists)
                     rm -rf cicd_dep
-                    git clone https://${GITHUB_TOKEN}@github.com/sheik-13/cicd_dep.git
+    
+                    # Clone the deployment repo
+                    git clone https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git
+    
+                    # Move into the repo
+                    cd cicd_dep
+    
+                    # Set Git config inside this repo
                     git config user.email "sheikmohamed77089@gmail.com"
                     git config user.name "sheik-13"
-                    BUILD_NUMBER=${BUILD_NUMBER}
+    
+                    # Replace image tag
                     sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
+    
+                    # Stage changes
                     git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+    
+                    # Commit changes (ignore if nothing changed)
+                    git commit -m "Update deployment image to version ${BUILD_NUMBER}" || echo "No changes to commit"
+    
+                    # Push back to GitHub
+                    git push origin main
                 '''
             }
         }
