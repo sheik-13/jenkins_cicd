@@ -13,6 +13,7 @@ pipeline {
         // credentialsId: 'b4a023c8-2eb1-4be8-86d8-96ddd6d05921'
       }
     }
+  }
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
